@@ -1,7 +1,6 @@
 import socket
 import struct
 import errno
-import time
 
 def get_mac_address(bytesString):
     bytesString = map("{:02x}".format, bytesString)
@@ -10,8 +9,7 @@ def get_mac_address(bytesString):
 def main():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TCP socket
-        s.connect(('www.google.com', 80))  # Connect to a web server on port 80
-        s.setblocking(0)  # Set the socket to non-blocking mode
+        s.connect(('www.example.com', 80))  # Connect to a web server on port 80
     except socket.error as e:
         print("Socket creation error:", e)
         return
@@ -19,10 +17,7 @@ def main():
     try:
         while True:
             try:
-                raw_data = s.recv(1024)  # Receive TCP packets
-                if len(raw_data) == 0:
-                    time.sleep(0.1)  # Sleep briefly to avoid busy-waiting
-                    continue
+                raw_data = s.recv(65565)  # Receive TCP packets
 
                 if len(raw_data) < 14:
                     print("Received data is too short for Ethernet frame header")
